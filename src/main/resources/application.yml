@@ -1,0 +1,20 @@
+spring:
+  application:
+    name: thindesk-dashboard
+  config:
+    import: optional:file:.env[.properties]
+  mongodb:
+    uri: ${MONGODB_URI}
+    database: ${MONGODB_DATABASE:thindesk}
+  data:
+    mongodb:
+      auto-index-creation: true
+  thymeleaf:
+    cache: false
+  web:
+    error:
+      include-stacktrace: never
+      include-message: never
+
+server:
+  port: ${PORT:8080}
