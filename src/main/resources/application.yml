@@ -18,3 +18,7 @@ spring:
 
 server:
   port: ${PORT:8080}
+
+thindesk:
+  carga-inicial:
+    habilitada: true
