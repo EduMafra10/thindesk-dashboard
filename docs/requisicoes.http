@@ -1,0 +1,82 @@
+@baseUrl = http://localhost:8080/api/chamados
+
+### Listar chamados
+GET {{baseUrl}}
+
+### Filtrar por status, tipo e período
+GET {{baseUrl}}?status=RESOLVIDO&tipo=ACESSO&dataInicio=2026-10-01&dataFim=2026-11-14&tamanho=5
+
+### Buscar por protocolo
+GET {{baseUrl}}/TD-000001
+
+### Abrir chamado
+# @name novoChamado
+POST {{baseUrl}}
+Content-Type: application/json
+
+{
+  "titulo": "Notebook sem áudio",
+  "descricao": "O notebook não reproduz som após a última atualização do sistema.",
+  "tipo": "HARDWARE",
+  "prioridade": "MEDIA",
+  "solicitante": "Ana Ribeiro",
+  "setor": "Comercial"
+}
+
+### Iniciar atendimento
+PATCH {{baseUrl}}/{{novoChamado.response.body.protocolo}}/status
+Content-Type: application/json
+
+{
+  "status": "EM_ANDAMENTO",
+  "tecnico": "Carlos Mendes"
+}
+
+### Resolver sem considerações técnicas (espera 422)
+PATCH {{baseUrl}}/{{novoChamado.response.body.protocolo}}/status
+Content-Type: application/json
+
+{
+  "status": "RESOLVIDO"
+}
+
+### Resolver com considerações técnicas
+PATCH {{baseUrl}}/{{novoChamado.response.body.protocolo}}/status
+Content-Type: application/json
+
+{
+  "status": "RESOLVIDO",
+  "consideracoes": "Driver de áudio reinstalado e funcionamento validado com a usuária."
+}
+
+### Alterar chamado já finalizado (espera 422)
+PATCH {{baseUrl}}/{{novoChamado.response.body.protocolo}}/status
+Content-Type: application/json
+
+{
+  "status": "CANCELADO",
+  "consideracoes": "Tentativa de cancelamento após resolução."
+}
+
+### Protocolo inexistente (espera 404)
+GET {{baseUrl}}/TD-999999
+
+### Protocolo em formato inválido (espera 400)
+GET {{baseUrl}}/abc
+
+### Status inválido no filtro (espera 400)
+GET {{baseUrl}}?status=FECHADO
+
+### Período invertido (espera 422)
+GET {{baseUrl}}?dataInicio=2026-11-10&dataFim=2026-11-01
+
+### Tamanho de página acima do limite (espera 400)
+GET {{baseUrl}}?tamanho=500
+
+### Campos obrigatórios ausentes (espera 400)
+POST {{baseUrl}}
+Content-Type: application/json
+
+{
+  "titulo": ""
+}
