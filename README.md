@@ -9,7 +9,7 @@ Painel administrativo do sistema de chamados técnicos **Thindesk**, com API RES
 | Item | Onde está |
 |---|---|
 | Documentação completa (requisitos, endpoints, evidências de testes) | [`docs/DOCUMENTACAO.md`](docs/DOCUMENTACAO.md) |
-| Vídeo de apresentação (até 3 minutos) | [`docs/video/`](docs/video/) |
+| Vídeo de apresentação | [`docs/video/apresentacao.mp4`](docs/video/apresentacao.mp4) |
 | Requisições de teste da API | [`docs/requisicoes.http`](docs/requisicoes.http) e [`docs/dashboard.http`](docs/dashboard.http) |
 | Código-fonte | [`src/`](src/) |
 
