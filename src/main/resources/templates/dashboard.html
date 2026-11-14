@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Thindesk · Painel administrativo</title>
+    <link rel="stylesheet" th:href="@{/css/dashboard.css}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js" defer></script>
+    <script type="module" th:src="@{/js/dashboard.js}"></script>
+</head>
+<body>
+<header class="topo">
+    <div>
+        <h1>Painel administrativo de chamados</h1>
+        <p class="texto-secundario">Thindesk · acompanhamento da operação de suporte técnico</p>
+    </div>
+    <div class="topo-acoes">
+        <span id="ultima-atualizacao" class="texto-suave" aria-live="polite"></span>
+        <button type="button" id="botao-atualizar" class="botao botao-secundario">Atualizar agora</button>
+    </div>
+</header>
+
+<main class="conteudo">
+    <form id="filtros" class="filtros" aria-label="Filtros de consulta">
+        <label>Data inicial
+            <input type="date" name="dataInicio">
+        </label>
+        <label>Data final
+            <input type="date" name="dataFim">
+        </label>
+        <label>Status
+            <select name="status"><option value="">Todos</option></select>
+        </label>
+        <label>Tipo
+            <select name="tipo"><option value="">Todos</option></select>
+        </label>
+        <label>Prioridade
+            <select name="prioridade"><option value="">Todas</option></select>
+        </label>
+        <label>Técnico
+            <select name="tecnico"><option value="">Todos</option></select>
+        </label>
+        <div class="filtros-acoes">
+            <button type="button" id="limpar-filtros" class="botao botao-secundario">Limpar</button>
+            <button type="submit" class="botao">Aplicar filtros</button>
+        </div>
+    </form>
+
+    <div id="alerta" class="alerta" role="alert" hidden></div>
+
+    <section id="indicadores" class="indicadores" aria-label="Indicadores gerais"></section>
+
+    <section class="painel">
+        <div class="painel-cabecalho">
+            <div>
+                <h2>Chamados por período</h2>
+                <p class="texto-secundario">Abertos e resolvidos no período filtrado</p>
+            </div>
+            <label class="seletor-compacto">Agrupar por
+                <select id="agrupamento"></select>
+            </label>
+        </div>
+        <div class="grafico">
+            <canvas id="grafico-periodo" role="img"
+                    aria-label="Gráfico de linhas com chamados abertos e resolvidos por período"></canvas>
+        </div>
+        <details class="dados-tabela">
+            <summary>Ver dados em tabela</summary>
+            <table id="tabela-periodo" class="tabela"></table>
+        </details>
+    </section>
+
+    <div class="grade-dupla">
+        <section class="painel">
+            <div>
+                <h2>Situação dos chamados</h2>
+                <p class="texto-secundario">Distribuição por status</p>
+            </div>
+            <ul id="lista-status" class="barras"></ul>
+        </section>
+        <section class="painel">
+            <div>
+                <h2>Tipos mais atendidos</h2>
+                <p class="texto-secundario">Chamados com atendimento iniciado</p>
+            </div>
+            <ol id="ranking-tipos" class="barras"></ol>
+        </section>
+    </div>
+
+    <section class="painel">
+        <div class="painel-cabecalho">
+            <div>
+                <h2>Chamados</h2>
+                <p id="resumo-paginacao" class="texto-secundario"></p>
+            </div>
+            <div class="paginacao">
+                <button type="button" id="pagina-anterior" class="botao botao-secundario">Anterior</button>
+                <button type="button" id="pagina-seguinte" class="botao botao-secundario">Próxima</button>
+            </div>
+        </div>
+        <div class="tabela-rolavel">
+            <table class="tabela">
+                <thead>
+                <tr>
+                    <th>Protocolo</th>
+                    <th>Título</th>
+                    <th>Tipo</th>
+                    <th>Prioridade</th>
+                    <th>Status</th>
+                    <th>Técnico</th>
+                    <th>Abertura</th>
+                    <th>Considerações técnicas</th>
+                    <th><span class="sr-only">Ações</span></th>
+                </tr>
+                </thead>
+                <tbody id="tabela-chamados"></tbody>
+            </table>
+        </div>
+    </section>
+</main>
+
+<dialog id="dialogo-status" aria-labelledby="titulo-dialogo">
+    <form id="form-status" class="dialogo">
+        <h2 id="titulo-dialogo">Atualizar chamado <span id="dialogo-protocolo"></span></h2>
+        <label>Novo status
+            <select name="status" required></select>
+        </label>
+        <label>Técnico responsável
+            <input type="text" name="tecnico" list="lista-tecnicos" maxlength="100" autocomplete="off">
+        </label>
+        <datalist id="lista-tecnicos"></datalist>
+        <label>Considerações técnicas
+            <textarea name="consideracoes" rows="4" maxlength="2000"></textarea>
+        </label>
+        <p id="erro-status" class="erro" role="alert" hidden></p>
+        <div class="dialogo-acoes">
+            <button type="button" id="cancelar-status" class="botao botao-secundario">Cancelar</button>
+            <button type="submit" class="botao">Salvar</button>
+        </div>
+    </form>
+</dialog>
+</body>
+</html>
