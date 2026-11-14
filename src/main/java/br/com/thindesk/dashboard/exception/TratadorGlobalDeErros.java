@@ -2,6 +2,7 @@ package br.com.thindesk.dashboard.exception;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.TypeMismatchException;
 import org.springframework.context.MessageSourceResolvable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -69,6 +70,13 @@ public class TratadorGlobalDeErros extends ResponseEntityExceptionHandler {
         ProblemDetail problema = problema(status, "Requisição inválida",
                 "O corpo da requisição está ausente ou em formato inválido.");
         return handleExceptionInternal(ex, problema, headers, status, request);
+    }
+
+    @Override
+    protected ResponseEntity<Object> handleTypeMismatch(
+            TypeMismatchException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
+        CampoInvalido erro = new CampoInvalido(ex.getPropertyName(), "Valor inválido para o campo.");
+        return handleExceptionInternal(ex, problemaDeValidacao(status, List.of(erro)), headers, status, request);
     }
 
     private static ProblemDetail problemaDeValidacao(HttpStatusCode status, List<CampoInvalido> erros) {

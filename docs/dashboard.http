@@ -1,0 +1,34 @@
+@baseUrl = http://localhost:8080/api/dashboard
+
+### Indicadores gerais
+GET {{baseUrl}}/indicadores
+
+### Indicadores filtrados por período e tipo
+GET {{baseUrl}}/indicadores?dataInicio=2026-10-01&dataFim=2026-11-14&tipo=ACESSO
+
+### Atendimentos por semana
+GET {{baseUrl}}/atendimentos-por-periodo?agrupamento=SEMANA
+
+### Atendimentos por mês
+GET {{baseUrl}}/atendimentos-por-periodo?agrupamento=MES
+
+### Atendimentos por dia no último mês
+GET {{baseUrl}}/atendimentos-por-periodo?agrupamento=DIA&dataInicio=2026-10-15&dataFim=2026-11-14
+
+### Situação dos chamados
+GET {{baseUrl}}/status
+
+### Tipos mais atendidos
+GET {{baseUrl}}/tipos-mais-atendidos?limite=5
+
+### Opções para os filtros
+GET {{baseUrl}}/opcoes-filtro
+
+### Agrupamento inválido (espera 400)
+GET {{baseUrl}}/atendimentos-por-periodo?agrupamento=ANO
+
+### Limite acima do permitido (espera 400)
+GET {{baseUrl}}/tipos-mais-atendidos?limite=50
+
+### Período diário muito longo (espera 422)
+GET {{baseUrl}}/atendimentos-por-periodo?agrupamento=DIA&dataInicio=2024-01-01&dataFim=2026-11-14
